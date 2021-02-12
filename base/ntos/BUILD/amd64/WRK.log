@@ -1,0 +1,38 @@
+﻿  	checktoolarch amd64
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\rtl\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\config\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\ex\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\ob\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\se\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\mm\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\ke\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\ps\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\io\iomgr\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\io\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\cache\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\lpc\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\dbgk\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\raw\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\fstub\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\fsrtl\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\wmi\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\perf\BUILD
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\init\BUILD
+  
+  C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\init\BUILD>xcopy objamd64\ntkrnlmp.obj C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD\objamd64\ /Y 
+  objamd64\ntkrnlmp.obj
+  1 File(s) copied
+  	cd C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD
+  	copy ..\init\ntoskrnl.src+..\init\amd64def.src objamd64\wrkamd64.pp
+  ..\init\ntoskrnl.src
+  ..\init\amd64def.src
+          1 file(s) copied.
+  	cl.exe -nologo -Zl -Zp8 -Gy -cbstring -W3 -WX -GR- -GF -GS -Wp64 -Oxt -EHs-c- /Oxt -Gs12288 -GL- -MT -U_MT -I..\amd64 -I. -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\ddk\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\internal\ds\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\internal\sdktools\inc  -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\internal\base\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\sdk\inc -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\sdk\inc\crt -IC:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\..\..\public\halkit\inc -Foobjamd64\ -D_WIN64 -D_AMD64_ -DAMD64 -DCONDITION_HANDLING=1 -DNT_INST=0 -DWIN32=100 -D_NT1X_=100 -DWINNT=1  -D_WIN32_WINNT=0x0502 -DWINVER=0x0502 -D_WIN32_IE=0x0603 -DWIN32_LEAN_AND_MEAN=1 -DDBG=0 -DDEVL=1  -D__BUILDMACHINE__=WRK1.2(university) -DNDEBUG  -D_NTSYSTEM_ -DNT_SMT -DNTOS_KERNEL_RUNTIME=1  -EP objamd64\wrkamd64.pp > EXE\wrkamd64.def
+  wrkamd64.pp
+  	del objamd64\wrkamd64.pp
+  	lib.exe -nologo -LIBPATH:C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD\objamd64 -LIBPATH:PREBUILT\amd64 -IGNORE:4108,4088,4218,4218,4235 -IGNORE:4108,4088,4218,4218,4235 -IGNORE:4010,4037,4039,4065,4070,4078,4087,4089,4221,4198 -WX -nodefaultlib -machine:amd64 -IGNORE:4001 objamd64\*.lib ntoswrk.lib -def:EXE\wrkamd64.def -out:EXE\wrkamd64.lib
+     Creating library EXE\wrkamd64.lib and object EXE\wrkamd64.exp
+  	lib.exe -nologo -LIBPATH:C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD\objamd64 -LIBPATH:PREBUILT\amd64 EXE\wrkamd64.lib ntosarch.lib -out:EXE\wrkamd64.lib
+  	link.exe -nologo -IGNORE:4108,4088,4218,4218,4235 -IGNORE:4087,4001,4010,4037,4039,4065,4070,4078,4087,4089,4221,4198 -WX -NODEFAULTLIB -machine:amd64 -LIBPATH:C:\Users\Administrator\Code\CSC362_Windows_Resources\WindowsResearchKernel-WRK\WRK-v1.2\base\ntos\BUILD\objamd64 -LIBPATH:PREBUILT\amd64 -release -version:5.2 -osversion:5.2 -subsystem:native,5.02 -merge:PAGECONST=PAGE -merge:INITCONST=INIT -merge:INITDATA=INIT -merge:PAGELKCONST=PAGELK  -merge:PAGEVRFY_CONST=PAGEVRFY -MERGE:_PAGE=PAGE -MERGE:_TEXT=.text -merge:.rdata=.text -SECTION:INIT,d -OPT:REF -OPT:ICF -INCREMENTAL:NO  -FULLBUILD -debug -functionpadmin:6 -debugtype:cv,fixup,pdata -STACK:0x80000,0x2000 -opt:nowin98 -pdbcompress -driver -out:EXE\wrkamd64.exe -map:EXE\wrkamd64.map -pdb:EXE\wrkamd64.pdb -entry:KiSystemStartup  PREBUILT\amd64\hotpatch.obj PREBUILT\amd64\ntoskrnl.res objamd64\ntkrnlmp.obj objamd64\*.lib ntoswrk.lib hal.lib EXE\wrkamd64.exp bootvid.lib sdbapint.lib kdcom.lib
+  	link.exe -edit -nologo -section:.rsrc,!d EXE\wrkamd64.exe
+  
