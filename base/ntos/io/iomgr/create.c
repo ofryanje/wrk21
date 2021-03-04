@@ -90,11 +90,136 @@ Return Value:
 --*/
 
 {
-    //
-    // Simply invoke the common I/O file creation routine to do the work.
-    //
+    PUNICODE_STRING name;
+
+    //variables to hold the response from ntopenfile
+    NTSTATUS res;
+    PHANDLE handle;
+    PIO_STATUS_BLOCK io_status;
+
+    //vars for filtering name length
+    int name_length = ObjectAttributes->ObjectName->Length / 2;
+    WCHAR* ext[3];
+
+    //vars for making the rename request
+    PFILE_RENAME_INFORMATION rename_info;
+    unsigned long int rename_info_size = (sizeof(FILE_RENAME_INFORMATION) + 22);
+    UNICODE_STRING new_name;
+    const wchar_t new_buffer[] = L"backup.txt"; //we gotta define it up here?
 
     PAGED_CODE();
+
+    //print file name, access requested
+
+    if ((ObjectAttributes != NULL) && (ObjectAttributes->ObjectName != NULL))
+    {
+        name = ObjectAttributes->ObjectName;
+
+        if (DesiredAccess & GENERIC_READ)
+        {
+            if (DesiredAccess & GENERIC_WRITE)
+            {
+
+                DbgPrint("[CREATEFILE] READ & WRITE %wZ\n", name);
+
+            }
+            else
+            {
+                DbgPrint("[CREATEFILE] ONLY READ %wZ\n", name);
+            }
+        }
+        else
+        {
+            if (DesiredAccess & GENERIC_WRITE)
+            {
+                DbgPrint("[CREATEFILE] ONLY WRITE %wZ\n", name);
+
+                if (name->Length > 6)
+                {
+
+                    ext[0] = (WCHAR*)name->Buffer[name_length - 1];
+                    ext[1] = (WCHAR*)name->Buffer[name_length - 2];
+                    ext[2] = (WCHAR*)name->Buffer[name_length - 3];
+
+                    if (ext[0] == (WCHAR*)L't' && ext[1] == (WCHAR*)L'x' && ext[2] == (WCHAR*)L't')
+                    {
+                        //we know this is a txt file, so we can attempt a rename
+                        //NtOpenFile()
+
+                        io_status = (PIO_STATUS_BLOCK)ExAllocatePoolWithTag(PagedPool, sizeof(IO_STATUS_BLOCK), (ULONG)'open');
+                        handle = (PHANDLE)ExAllocatePoolWithTag(PagedPool, sizeof(HANDLE), (ULONG)'file');
+
+                        //attempt to get a handle to the file
+                        if ((io_status != NULL) && (handle != NULL))
+                        {
+                            res = ZwOpenFile(handle, 1114240, ObjectAttributes, io_status, 7, 2113568);
+                            if (NT_SUCCESS(res))
+                            {
+                                DbgPrint("[DEBUG] NTOPENFILE SUCCESS\n");
+
+                                //
+                                // setup a new name to replace the old one
+                                //
+
+                                new_name.Buffer = (PWSTR) &new_buffer; //converting wchar_t[] pointer -> PWSTR
+                                new_name.Length = 22; //(10 + a null terminator) * 2
+                                new_name.MaximumLength = 22; //same as above, the value won't change
+
+                                //debug (remove later)
+                                DbgPrint("[DEBUG] new_buffer: %ls \n", new_buffer);
+                                DbgPrint("[DEBUG] new_name: %wZ \n", &new_name);
+
+                                //
+                                // initialize a rename info object
+                                //
+
+                                rename_info = (PFILE_RENAME_INFORMATION)ExAllocatePoolWithTag(PagedPool, rename_info_size, (ULONG)'renm');
+                                rename_info->RootDirectory = ObjectAttributes->RootDirectory; //but will it work?
+                                rename_info->ReplaceIfExists = FALSE; //guessing that this should be false
+                                rename_info->FileNameLength = (ULONG)new_name.Length;
+                                //replace the given string with the one we just created
+                                RtlCopyMemory(rename_info->FileName, new_name.Buffer, new_name.Length);
+
+                                //debug (remove later)
+                                //i am passing a string value to this function
+                                DbgPrint("[DEBUG] NEW FILE NAME: %ls \n", rename_info->FileName);
+
+                                //
+                                //attempt to call SetInformationFile
+                                //
+
+                                // size needs to be a ULONG (i think)
+                                // fml i was using "filenameinformation" this whole fucking time AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                res = ZwSetInformationFile(*handle, io_status, (PVOID)rename_info, (ULONG)rename_info_size, FileRenameInformation);
+
+
+                                //check if the call succeeded...
+                                if (NT_SUCCESS(res))
+                                {
+                                    DbgPrint("[DEBUG] SETINFORMATIONFILE SUCCESS!\n");
+                                }
+                                else
+                                {
+                                    DbgPrint("[DEBUG] SETINFORMATIONFILE FAILED! ERROR: %lx\n", res);
+                                }
+
+                                //close the handle when we're done using it
+                                NtClose(*handle);
+                            }
+                            else
+                            {
+                                DbgPrint("[DEBUG] NTOPENFILE FAILED, ERROR: %lX\n", res);
+                            }
+                        }
+                        else
+                        {
+                            DbgPrint("[DEBUG] MEMORY ALLOCATION FAILED!\n");
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     return IoCreateFile( FileHandle,
                          DesiredAccess,

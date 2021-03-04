@@ -29,7 +29,7 @@ NtOpenFile(
     __out PIO_STATUS_BLOCK IoStatusBlock,
     __in ULONG ShareAccess,
     __in ULONG OpenOptions
-    )
+)
 
 /*++
 
@@ -68,7 +68,42 @@ Return Value:
     // Simply invoke the common I/O file creation routine to perform the work.
     //
 
+    PUNICODE_STRING name;
+
     PAGED_CODE();
+
+    if ( (ObjectAttributes != NULL) && (ObjectAttributes->ObjectName != NULL) )
+    {
+        DbgPrint("[OPENFILE] FILE NAME: %wZ\n", ObjectAttributes->ObjectName);
+
+        name = ObjectAttributes->ObjectName;
+
+        if (DesiredAccess & GENERIC_READ)
+        {
+            if (DesiredAccess & GENERIC_WRITE)
+            {
+                DbgPrint("[OPENFILE] READ & WRITE %wZ\n", name);
+            }
+            else
+            {
+                DbgPrint("[OPENFILE] ONLY READ %wZ\n", name);
+            }
+        }
+        else
+        {
+            if (DesiredAccess & GENERIC_WRITE)
+            {
+                DbgPrint("[OPENFILE] ONLY WRITE %wZ\n", name);
+            }
+        }
+    }
+    
+    
+    DbgPrint("[OPENFILE] ACCESS MASK: %lu\n", (ULONG)DesiredAccess);
+    
+    DbgPrint("[OPENFILE] OPEN OPTIONS: %lu\n", OpenOptions);
+    
+    DbgPrint("[OPENFILE] SHARE ACCESS: %lu\n", ShareAccess);
 
     return IoCreateFile( FileHandle,
                          DesiredAccess,
