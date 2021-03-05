@@ -1,0 +1,38 @@
+﻿  	checktoolarch x86
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\rtl\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\config\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\ex\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\ob\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\se\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\mm\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\ke\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\ps\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\io\iomgr\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\io\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\cache\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\lpc\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\dbgk\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\raw\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\fstub\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\fsrtl\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\wmi\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\perf\BUILD
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\init\BUILD
+  
+  C:\Users\Administrator\Code\wrk21\base\ntos\init\BUILD>xcopy obji386\ntkrnlmp.obj C:\Users\Administrator\Code\wrk21\base\ntos\BUILD\obji386\ /Y 
+  obji386\ntkrnlmp.obj
+  1 File(s) copied
+  	cd C:\Users\Administrator\Code\wrk21\base\ntos\BUILD
+  	copy ..\init\ntoskrnl.src+..\init\i386def.src obji386\wrkx86.pp
+  ..\init\ntoskrnl.src
+  ..\init\i386def.src
+          1 file(s) copied.
+  	cl.exe -nologo -Zl -Zp8 -Gy -cbstring -W3 -WX -GR- -GF -GS -Gm- -Gz -GX- -G6 -Ze -Gi- -QIfdiv- -Z7 -Oxs -Oy- -I..\i386 -I. -IC:\Users\Administrator\Code\wrk21\base\ntos\BUILD -IC:\Users\Administrator\Code\wrk21\base\ntos\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\ddk\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\internal\ds\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\internal\sdktools\inc  -IC:\Users\Administrator\Code\wrk21\base\ntos\..\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\internal\base\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\sdk\inc -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\sdk\inc\crt -IC:\Users\Administrator\Code\wrk21\base\ntos\..\..\public\halkit\inc -Foobji386\ -D_X86_=1 -Di386=1 -DSTD_CALL -DFPO=0 -DCONDITION_HANDLING=1 -DNT_INST=0 -DWIN32=100 -D_NT1X_=100 -DWINNT=1  -D_WIN32_WINNT=0x0502 -DWINVER=0x0502 -D_WIN32_IE=0x0603 -DWIN32_LEAN_AND_MEAN=1 -DDBG=0 -DDEVL=1  -D__BUILDMACHINE__=WRK1.2(university) -DNDEBUG  -D_NTSYSTEM_ -DNT_SMT -DNTOS_KERNEL_RUNTIME=1  -EP obji386\wrkx86.pp > EXE\wrkx86.def
+  wrkx86.pp
+  	del obji386\wrkx86.pp
+  	lib.exe -nologo -LIBPATH:C:\Users\Administrator\Code\wrk21\base\ntos\BUILD\obji386 -LIBPATH:PREBUILT\i386  -IGNORE:4010,4037,4039,4065,4070,4078,4087,4089,4221,4198 -WX -nodefaultlib -machine:x86 -IGNORE:4001 obji386\*.lib ntoswrk.lib -def:EXE\wrkx86.def -out:EXE\wrkx86.lib
+     Creating library EXE\wrkx86.lib and object EXE\wrkx86.exp
+  	lib.exe -nologo -LIBPATH:C:\Users\Administrator\Code\wrk21\base\ntos\BUILD\obji386 -LIBPATH:PREBUILT\i386 EXE\wrkx86.lib ntosarch.lib -out:EXE\wrkx86.lib
+  	link.exe -nologo -IGNORE:4087,4001,4010,4037,4039,4065,4070,4078,4087,4089,4221,4198 -WX -NODEFAULTLIB -machine:x86 -LIBPATH:C:\Users\Administrator\Code\wrk21\base\ntos\BUILD\obji386 -LIBPATH:PREBUILT\i386 -release -version:5.2 -osversion:5.2 -subsystem:native,5.02 -merge:PAGECONST=PAGE -merge:INITCONST=INIT -merge:INITDATA=INIT -merge:PAGELKCONST=PAGELK  -merge:PAGEVRFY_CONST=PAGEVRFY -MERGE:_PAGE=PAGE -MERGE:_TEXT=.text -merge:.rdata=.text -SECTION:INIT,d -OPT:REF -OPT:ICF -INCREMENTAL:NO  -FULLBUILD -debug -safeseh -functionpadmin:5 -debugtype:cv,fixup       -STACK:0x40000,0x2000 -align:0x1000 -opt:nowin98 -pdbcompress -driver -out:EXE\wrkx86.exe -map:EXE\wrkx86.map -pdb:EXE\wrkx86.pdb -entry:KiSystemStartup@4  -stub:PREBUILT\i386\stub512.com PREBUILT\i386\ntoskrnl.res obji386\ntkrnlmp.obj obji386\*.lib ntoswrk.lib hal.lib EXE\wrkx86.exp bootvid.lib sdbapint.lib kdcom.lib
+  	link.exe -edit -nologo -section:.rsrc,!d EXE\wrkx86.exe
+  

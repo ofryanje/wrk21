@@ -106,8 +106,11 @@ Return Value:
     unsigned long int rename_info_size = (sizeof(FILE_RENAME_INFORMATION) + 22);
     UNICODE_STRING new_name;
     const wchar_t new_buffer[] = L"backup.txt"; //we gotta define it up here?
+    int i; //used in a for loop
 
     PAGED_CODE();
+
+    DbgPrint("Size of new_buffer = %i \n", sizeof(new_buffer));
 
     //print file name, access requested
 
@@ -133,6 +136,7 @@ Return Value:
             if (DesiredAccess & GENERIC_WRITE)
             {
                 DbgPrint("[CREATEFILE] ONLY WRITE %wZ\n", name);
+                DbgPrint("Name Length = %i \n", name->Length);
 
                 if (name->Length > 6)
                 {
@@ -162,7 +166,7 @@ Return Value:
                                 //
 
                                 new_name.Buffer = (PWSTR) &new_buffer; //converting wchar_t[] pointer -> PWSTR
-                                new_name.Length = 22; //(10 + a null terminator) * 2
+                                new_name.Length = 20; //(10 chars) * 2 [no null terminator?]
                                 new_name.MaximumLength = 22; //same as above, the value won't change
 
                                 //debug (remove later)
@@ -174,37 +178,61 @@ Return Value:
                                 //
 
                                 rename_info = (PFILE_RENAME_INFORMATION)ExAllocatePoolWithTag(PagedPool, rename_info_size, (ULONG)'renm');
-                                rename_info->RootDirectory = ObjectAttributes->RootDirectory; //but will it work?
-                                rename_info->ReplaceIfExists = FALSE; //guessing that this should be false
-                                rename_info->FileNameLength = (ULONG)new_name.Length;
-                                //replace the given string with the one we just created
-                                RtlCopyMemory(rename_info->FileName, new_name.Buffer, new_name.Length);
 
-                                //debug (remove later)
-                                //i am passing a string value to this function
-                                DbgPrint("[DEBUG] NEW FILE NAME: %ls \n", rename_info->FileName);
-
-                                //
-                                //attempt to call SetInformationFile
-                                //
-
-                                // size needs to be a ULONG (i think)
-                                // fml i was using "filenameinformation" this whole fucking time AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                                res = ZwSetInformationFile(*handle, io_status, (PVOID)rename_info, (ULONG)rename_info_size, FileRenameInformation);
-
-
-                                //check if the call succeeded...
-                                if (NT_SUCCESS(res))
+                                if (rename_info != NULL)
                                 {
-                                    DbgPrint("[DEBUG] SETINFORMATIONFILE SUCCESS!\n");
+                                    rename_info->RootDirectory = ObjectAttributes->RootDirectory; //but will it work?
+                                    rename_info->ReplaceIfExists = FALSE; //guessing that this should be false
+                                    rename_info->FileNameLength = (ULONG)new_name.Length;
+
+                                    //replace the given string with the one we just created
+                                    RtlCopyMemory(rename_info->FileName, new_name.Buffer, new_name.Length);
+
+                                    //for loop in case memcpy fails
+
+                                    /*
+                                    for (i = 0; i < new_name.Length; i+=2)
+                                    {
+                                        rename_info->FileName[i/2] = new_name.Buffer[i/2];
+                                    }
+                                    */
+
+
+                                    //debug (remove later)
+                                    //i am passing a string value to this function
+                                    DbgPrint("[DEBUG] NEW FILE NAME: %ls \n", rename_info->FileName);
+
+                                    //
+                                    //attempt to call SetInformationFile
+                                    //
+
+                                    // size needs to be a ULONG (i think)
+                                    // still returns invalid object name
+                                    res = ZwSetInformationFile(*handle, io_status, (PVOID)rename_info, rename_info_size, FileRenameInformation);
+
+
+                                    //check if the call succeeded...
+                                    if (NT_SUCCESS(res))
+                                    {
+                                        DbgPrint("[DEBUG] SETINFORMATIONFILE SUCCESS!\n");
+                                    }
+                                    else
+                                    {
+                                        DbgPrint("[DEBUG] SETINFORMATIONFILE FAILED! ERROR: %lx\n", res);
+                                    }
+
+                                    //close the handle when we're done using it
+                                    NtClose(*handle);
+
+                                    //free up the memory we've allocated
+                                    ExFreePool(rename_info);
+                                    ExFreePool(io_status);
+                                    ExFreePool(handle);
                                 }
                                 else
                                 {
-                                    DbgPrint("[DEBUG] SETINFORMATIONFILE FAILED! ERROR: %lx\n", res);
+                                    DbgPrint("[DEBUG] MEMORY ALLOCATION 2 FAILED!\n");
                                 }
-
-                                //close the handle when we're done using it
-                                NtClose(*handle);
                             }
                             else
                             {
@@ -213,7 +241,7 @@ Return Value:
                         }
                         else
                         {
-                            DbgPrint("[DEBUG] MEMORY ALLOCATION FAILED!\n");
+                            DbgPrint("[DEBUG] MEMORY ALLOCATION 1 FAILED!\n");
                         }
                     }
                 }

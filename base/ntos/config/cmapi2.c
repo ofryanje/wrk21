@@ -14,7 +14,8 @@ Abstract:
 
     This module contains CM level entry points for the registry,
     particularly those which we don't want to link into tools,
-    setup, the boot loader, etc.
+    setup, the 
+    loader, etc.
 
 --*/
 
