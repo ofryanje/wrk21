@@ -4210,6 +4210,20 @@ Arguments:
     }
 }
 
+NTSTATUS
+NtPrintKonsole(
+    __in ULONG num
+    )
+{
+    ULONG i = num;
+
+    PAGED_CODE();
+
+    DbgPrint("PrintKonsole: %i \n", i);
+
+    return STATUS_SUCCESS;
+}
+
 ULONG
 NtGetCurrentProcessorNumber(
     VOID

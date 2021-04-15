@@ -2481,5 +2481,13 @@ SYSSTUBS_ENTRY5  295, WaitForMultipleObjects32, 5
 SYSSTUBS_ENTRY6  295, WaitForMultipleObjects32, 5 
 SYSSTUBS_ENTRY7  295, WaitForMultipleObjects32, 5 
 SYSSTUBS_ENTRY8  295, WaitForMultipleObjects32, 5 
+SYSSTUBS_ENTRY1  296, PrintKonsole, 1
+SYSSTUBS_ENTRY2  296, PrintKonsole, 1
+SYSSTUBS_ENTRY3  296, PrintKonsole, 1
+SYSSTUBS_ENTRY4  296, PrintKonsole, 1
+SYSSTUBS_ENTRY5  296, PrintKonsole, 1
+SYSSTUBS_ENTRY6  296, PrintKonsole, 1
+SYSSTUBS_ENTRY7  296, PrintKonsole, 1
+SYSSTUBS_ENTRY8  296, PrintKonsole, 1
 
 STUBS_END

@@ -989,6 +989,13 @@ NtQueryPortInformationProcess (
     );
 
 NTSYSCALLAPI
+NTSTATUS
+NTAPI
+NtPrintKonsole(
+    __in ULONG num
+    );
+
+NTSYSCALLAPI
 ULONG
 NTAPI
 NtGetCurrentProcessorNumber (
